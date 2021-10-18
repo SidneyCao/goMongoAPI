@@ -49,7 +49,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	fmt.Println(actTypeMap[actType+subType])
 
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
-	init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
+	//init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
 
 	var result bson.D
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
