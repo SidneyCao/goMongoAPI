@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -43,7 +44,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	if err != nil {
 		log.Printf("failed to search: %v", err)
 	}
-	if err == fmt.Errorf("mongo: no documents in result") {
+	if err == errors.New("mongo: no documents in result") {
 		fmt.Println("匹配")
 	}
 	fmt.Println(result)
