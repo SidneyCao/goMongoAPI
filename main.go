@@ -62,9 +62,9 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 		if errIns != nil {
 			log.Printf("failed to insert init: %v\n", errIns)
 		}
-
-		fmt.Println("match")
 		**/
+		fmt.Println("match")
+
 	}
 	fmt.Println(result)
 }
