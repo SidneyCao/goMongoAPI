@@ -46,23 +46,27 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	actType := strings.Split(line, string(uint64(1)))[11]
 	subType := strings.Split(line, string(uint64(1)))[12]
 	//fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
-	fmt.Println(actTypeMap[actType+subType])
+	//fmt.Println(actTypeMap[actType+subType])
 
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
 	init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
+	update := bson.D{{"$inc", bson.D{{actTypeMap[actType+subType], 1}}}}
 
 	var result bson.D
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		log.Printf("failed to search: %v", err)
 		if err.Error() == "mongo: no documents in result" {
-			_, errIns := collection.InsertOne(context.TODO(), init)
-			if errIns != nil {
-				log.Printf("failed to insert init: %v\n", errIns)
+			_, errInsert := collection.InsertOne(context.TODO(), init)
+			if errInsert != nil {
+				log.Printf("failed to insert init: %v\n", errInsert)
 			}
 		}
 	}
-	fmt.Println(result)
+	_, errUpdate := collection.UpdateOne(context.TODO(), filter, update)
+	if errUpdate != nil {
+		log.Printf("failed to update: %v\n", errUpdate)
+	}
 }
 
 func main() {
