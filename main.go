@@ -59,7 +59,7 @@ func main() {
 		if err == io.EOF {
 			break
 		}
-		fmt.Print(string(line))
+		fmt.Println(string(line))
 	}
 	/**
 	filter := bson.D{{"anjie", 1}}
