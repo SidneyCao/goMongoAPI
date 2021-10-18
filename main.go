@@ -51,19 +51,17 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
 	init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
 
-	var result bson.D
-	err := collection.FindOne(context.TODO(), filter).Decode(&result)
+	err := collection.FindOne(context.TODO(), filter).Err()
 	if err != nil {
 		log.Printf("failed to search: %v", err)
 	}
+
 	if err.Error() == "mongo: no documents in result" {
 		_, errIns := collection.InsertOne(context.TODO(), init)
 		if errIns != nil {
 			log.Printf("failed to insert init: %v\n", errIns)
 		}
 	}
-
-	fmt.Println(result)
 }
 
 func main() {
