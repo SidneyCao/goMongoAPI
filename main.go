@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -28,7 +29,7 @@ var (
 var waitGroup sync.WaitGroup
 
 func Process(client *mongo.Client, collection *mongo.Collection, line string) {
-	fmt.Println(line)
+	fmt.Println(strings.Split(line, string(uint64(1)))[2])
 	defer waitGroup.Done()
 }
 
