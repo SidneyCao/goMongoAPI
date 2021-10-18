@@ -30,7 +30,11 @@ var waitGroup sync.WaitGroup
 
 func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	date := strings.Split(strings.Split(line, string(uint64(1)))[2], " ")[0]
-	fmt.Println(date)
+	sid := strings.Split(line, string(uint64(1)))[4]
+	uid := strings.Split(line, string(uint64(1)))[7]
+	actType := strings.Split(line, string(uint64(1)))[11]
+	subType := strings.Split(line, string(uint64(1)))[12]
+	fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
 	defer waitGroup.Done()
 }
 
