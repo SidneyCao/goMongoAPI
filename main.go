@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,13 +24,20 @@ var (
 	file       = flag.String("f", "", "read file")
 )
 
+//创建wait group
+var waitGroup sync.WaitGroup
+
 func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	fmt.Println(line)
+	defer waitGroup.Done()
 }
 
 func main() {
 	//获取参数
 	flag.Parse()
+
+	//wait group中始终有n+1个counter
+	waitGroup.Add(1)
 
 	//新建mongo client
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -59,6 +67,7 @@ func main() {
 		if err == io.EOF {
 			break
 		}
+		waitGroup.Add(1)
 		go Process(client, collection, string(line))
 	}
 	/**
@@ -72,4 +81,6 @@ func main() {
 
 	fmt.Println(result)
 	**/
+	waitGroup.Done()
+	waitGroup.Wait()
 }
