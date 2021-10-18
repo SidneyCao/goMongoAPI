@@ -26,6 +26,15 @@ var (
 	file       = flag.String("f", "", "read file")
 )
 
+var actTypeMap = map[string]string{"finishtask1": "xionggui",
+	"finishtask2": "nvshen",
+	"finishtask3": "jiban",
+	"finishtask4": "anjie",
+	"lottery20":   "quan",
+	"lottery21":   "quan",
+	"develop27":   "fumo",
+}
+
 //创建wait group
 var waitGroup sync.WaitGroup
 
@@ -36,15 +45,18 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	uid := strings.Split(line, string(uint64(1)))[7]
 	actType := strings.Split(line, string(uint64(1)))[11]
 	subType := strings.Split(line, string(uint64(1)))[12]
-	fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
+	//fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
+	fmt.Println(actTypeMap[actType+subType])
+
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
+
 	var result bson.D
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		log.Printf("failed to search: %v", err)
 	}
 	if err.Error() == "mongo: no documents in result" {
-		fmt.Println("匹配")
+		fmt.Println("match")
 	}
 	fmt.Println(result)
 }
