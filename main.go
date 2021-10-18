@@ -63,6 +63,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 			}
 		}
 	}
+
 	_, errUpdate := collection.UpdateOne(context.TODO(), filter, update)
 	if errUpdate != nil {
 		log.Printf("failed to update: %v\n", errUpdate)
