@@ -46,7 +46,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	actType := strings.Split(line, string(uint64(1)))[11]
 	subType := strings.Split(line, string(uint64(1)))[12]
 	//fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
-	//fmt.Println(actTypeMap[actType+subType])
+	fmt.Println(actTypeMap[actType+subType])
 
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
 	init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
@@ -59,7 +59,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	if err.Error() == "mongo: no documents in result" {
 		_, errIns := collection.InsertOne(context.TODO(), init)
 		if errIns != nil {
-			log.Println("failed to insert init: %v", errIns)
+			log.Printf("failed to insert init: %v\n", errIns)
 		}
 	}
 
