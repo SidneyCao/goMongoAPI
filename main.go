@@ -41,7 +41,7 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	var result bson.D
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
-		log.Panicf("failed to search: %v", err)
+		log.Printf("failed to search: %v", err)
 	}
 	fmt.Println(result)
 }
