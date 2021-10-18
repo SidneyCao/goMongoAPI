@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	host       = flag.String("h", "", "mongo host")
+	host       = flag.String("ho", "", "mongo host")
 	user       = flag.String("u", "", "mongo user")
 	password   = flag.String("p", "", "mongo password")
 	db         = flag.String("d", "", "mongo db")
