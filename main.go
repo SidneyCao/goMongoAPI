@@ -56,14 +56,17 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	if err != nil {
 		log.Printf("failed to search: %v", err)
 	}
-	/**
+
 	if err.Error() == "mongo: no documents in result" {
+		/**
 		_, errIns := collection.InsertOne(context.TODO(), init)
 		if errIns != nil {
 			log.Printf("failed to insert init: %v\n", errIns)
 		}
+		**/
+		fmt.Println("match")
 	}
-	**/
+
 	fmt.Println(result)
 }
 
