@@ -14,6 +14,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -29,13 +30,20 @@ var (
 var waitGroup sync.WaitGroup
 
 func Process(client *mongo.Client, collection *mongo.Collection, line string) {
+	defer waitGroup.Done()
 	date := strings.Split(strings.Split(line, string(uint64(1)))[2], " ")[0]
 	sid := strings.Split(line, string(uint64(1)))[4]
 	uid := strings.Split(line, string(uint64(1)))[7]
 	actType := strings.Split(line, string(uint64(1)))[11]
 	subType := strings.Split(line, string(uint64(1)))[12]
 	fmt.Printf("%s,%s,%s,%s,%s\n", date, sid, uid, actType, subType)
-	defer waitGroup.Done()
+	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
+	var result bson.D
+	err := collection.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		log.Panicf("failed to search: %v", err)
+	}
+	fmt.Println(result)
 }
 
 func main() {
@@ -76,17 +84,7 @@ func main() {
 		waitGroup.Add(1)
 		go Process(client, collection, string(line))
 	}
-	/**
-	filter := bson.D{{"anjie", 1}}
 
-	var result bson.D
-	err = collection.FindOne(context.TODO(), filter).Decode(&result)
-	if err != nil {
-		log.Panicf("failed to search: %v", err)
-	}
-
-	fmt.Println(result)
-	**/
 	waitGroup.Done()
 	waitGroup.Wait()
 }
