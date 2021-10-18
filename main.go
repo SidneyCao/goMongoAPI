@@ -23,8 +23,8 @@ var (
 	file       = flag.String("f", "", "read file")
 )
 
-func Process(client *mongo.Client, collection *mongo.Collection) {
-
+func Process(client *mongo.Client, collection *mongo.Collection, line string) {
+	fmt.Println(line)
 }
 
 func main() {
@@ -44,7 +44,7 @@ func main() {
 		}
 	}()
 	//获取collection
-	//collection := client.Database(*db).Collection(*collection)
+	collection := client.Database(*db).Collection(*collection)
 
 	//读取差异文件
 	f, err := os.Open(*file)
@@ -59,7 +59,7 @@ func main() {
 		if err == io.EOF {
 			break
 		}
-		fmt.Println(string(line))
+		go Process(client, collection, string(line))
 	}
 	/**
 	filter := bson.D{{"anjie", 1}}
