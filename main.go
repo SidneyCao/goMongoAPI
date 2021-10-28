@@ -49,7 +49,9 @@ func Process(client *mongo.Client, collection *mongo.Collection, line string) {
 	//fmt.Println(actTypeMap[actType+subType])
 
 	filter := bson.D{{"_id", date + "_" + sid + "_" + uid}}
+	//如果不存在这个记录就创建初始化
 	init := bson.D{{"_id", date + "_" + sid + "_" + uid}, {"xionggui", 0}, {"nvshen", 0}, {"jiban", 0}, {"anjie", 0}, {"quan", 0}, {"fumo", 0}}
+	//若存在就更新对应字段
 	update := bson.D{{"$inc", bson.D{{actTypeMap[actType+subType], 1}}}}
 
 	var result bson.D
